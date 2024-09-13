@@ -14,8 +14,7 @@ let nickName = ''
 let yiliToken = ''
 let openId = ''
 let unionId = ''
-let YiLi_Code = ($.isNode() ? process.env.YiLi_Code : $.getdata("YiLi_Code")) || [];
-YiLi_Code = YiLi_Code.replace(/[\[\]']/g, "").split(",");
+let YiLi_Code = ['喜出望外','满月飞明镜','月圆人团圆伊利情绵绵']
 let notice = ''
 !(async () => {
     if (typeof $request != "undefined") {
@@ -60,7 +59,7 @@ async function main() {
             let seePage = await commonGet(`/fragment/ticket/see-page?openId=${openId}`)
             console.log(`浏览：${seePage.message}`)
         }
-if (YiLi_Code.length) {
+        if (YiLi_Code.length) {
             let authorize = await yiLiGet(`/developer/oauth2/buyer/authorize?app_key=zdcade261b48eb4c5e`)
             if (authorize.data) {
                 for (var i = 0; i < YiLi_Code.length; i++) {

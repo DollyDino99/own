@@ -16,7 +16,15 @@ let openId = ''
 let unionId = ''
 let type = '2'
 let type1 = '2'
-let YiLi_Code = ''
+let YiLi_Codes = [
+    '廖艳邀您来伊利拿礼',
+    '文慧邀您来伊利拿礼',
+    '冉七邀您来伊利拿礼',
+    '韩桧君邀您来伊利拿礼',
+    '吕文秀邀您来伊利拿礼',
+    '青晓琼邀您来伊利拿礼',
+    '唐佳丽邀您来伊利拿礼'
+];
 let notice = ''
 !(async () => {
     if (typeof $request != "undefined") {
@@ -63,16 +71,18 @@ async function main() {
             let seePage = await commonGet(`/fragment/ticket/see-page?openId=${openId}`)
             console.log(`浏览：${seePage.message}`)
         }
-        if (YiLi_Code) {
-            let authorize = await yiLiGet(`/developer/oauth2/buyer/authorize?app_key=zdcade261b48eb4c5e`)
-            if (authorize.data) {
-                let inputCode = await commonGet(`/fragment/ticket/input-code?code=${encodeURIComponent(YiLi_Code)}&authorizationCode=${authorize.data}&openId=${openId}`)
-                console.log(`口令兑换：${inputCode.message}`)
-            } else {
-                console.log(authorize?.error?.msg)
-                await sendMsg(`用户：${mobile}\nyiliToken已过期，请重新获取`);
-            }
+        for (let YiLi_Code of YiLi_Codes) {
+    if (YiLi_Code) {
+        let authorize = await yiLiGet(/developer/oauth2/buyer/authorize?app_key=zdcade261b48eb4c5e);
+        if (authorize.data) {
+            let inputCode = await commonGet(/fragment/ticket/input-code?code=${encodeURIComponent(YiLi_Code)}&authorizationCode=${authorize.data}&openId=${openId});
+            console.log(口令兑换：${inputCode.message});
+        } else {
+            console.log(authorize?.error?.msg);
+            await sendMsg(用户：${mobile}\nyiliToken已过期，请重新获取);
         }
+    }
+}
         let ticketGet = await commonGet(`/fragment/ticket/get?openId=${openId}`)
         console.log(`拥有抽卡次数：${ticketGet.data}次`)
         for (let i = 0; i < ticketGet.data; i++) {
